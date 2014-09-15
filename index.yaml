@@ -1,0 +1,6 @@
+indexes:
+- kind: Memory
+  ancestor: yes
+  properties:
+  - name: date
+    direction: desc

@@ -1,0 +1,21 @@
+application: gothic-gradient-696
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+handlers:
+- url: /js
+  static_dir: js
+- url: /css
+  static_dir: css
+- url: /fonts
+  static_dir: fonts
+- url: /.*
+  script: pensieve.application
+
+libraries:
+- name: jinja2
+  version: latest
+- name: webapp2
+  version: latest

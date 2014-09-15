@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html lang="en" class="no-js">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+		<title>Pensieve</title>
+		<meta name="description" content="Blueprint: Vertical Timeline" />
+		<meta name="keywords" content="timeline, vertical, layout, style, component, web development, template, responsive" />
+		<meta name="author" content="Codrops" />
+		<link rel="shortcut icon" href="../favicon.ico">
+		<link rel="stylesheet" type="text/css" href="css/default.css" />
+		<link rel="stylesheet" type="text/css" href="css/component.css" />
+		<script src="js/modernizr.custom.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<header class="clearfix">
+				<h1>Pensieve</h1>
+ 				<nav>
+					<a href="/" class="bp-icon bp-icon-prev" data-info="Pensieve"><span>Go Back</span></a>
+				</nav> 
+			</header>	
+			<div class="main">
+			{% if memories|length > 0 %}
+				<ul class="cbp_tmtimeline">
+
+				
+					{% for memory in memories %}	
+					<li>
+					    
+						<time class="cbp_tmtime" datetime="2013-04-10 18:30"><span>{{memory.date}}</span></time>
+					
+					
+						<div class="cbp_tmicon cbp_tmicon-earth"></div>
+						<div class="cbp_tmlabel">
+
+						<form action="/remove" method="post" style="float:right">
+					    	<input value="{{memory.datetime}}" name="datetime" style="display:none">
+					    	<input type="submit" value="Delete">
+					    </form>
+					  
+							<h2>{{memory.title}}</h2>
+							<p>{{memory.description}}</p>
+						</div>
+					
+					
+					</li>
+					{% endfor %}
+				</ul>
+
+					{% else %}
+					<div class="no_mem">
+						Requested memory doesn't exist
+						<span class="no_mem_exp">
+							<a href="/">Go back</a>
+						</span>
+					</div>	
+					{% endif %}
+			</div>
+		</div>
+	</body>
+</html>
+{% endautoescape %}
