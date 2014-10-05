@@ -192,3 +192,7 @@ span.no_mem_exp a {
 span.no_mem_exp a:hover {
 	color: black
 }
+
+body {
+	background-color: #F0F8FF;
+}

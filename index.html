@@ -12,6 +12,7 @@
 		<link rel="stylesheet" type="text/css" href="css/default.css" />
 		<link rel="stylesheet" type="text/css" href="css/component.css" />
 		<script src="js/modernizr.custom.js"></script>
+		<link rel="shortcut icon" href="/favicon.ico" />
 	</head>
 	<body>
 	<script>
@@ -33,10 +34,12 @@
 </script>
 		<div class="container">
 			<header class="clearfix">
-				<h1>Pensieve</h1>
+				<span>Pensieve</span>
+				<h3>Because some memories are forever</h3> 
  				<nav>
 					<a href="/form.html" class="bp-icon bp-icon-next" data-info="Add Memory"><span>Add memory</span></a>
-				</nav> 
+				</nav>
+
 			</header>	
 			<div class="main">
 			{% if assortedmem|length > 0 %}
@@ -53,11 +56,6 @@
 						<div class="cbp_tmlabel">
 						
 						<div style="float:right" class="fb-share-button" data-href="{{host_url}}/memory?dtime={{memory[1]}}.{{memory[0].datetime.microsecond}}"></div>
-
-						<form action="/remove" method="post" style="float:right">
-					    	<input value="{{memory[0].datetime}}" name="datetime" style="display:none">
-					    	<input type="submit" value="Delete">
-					    </form>
 					  
 							<h2>{{memory[0].title}}</h2>
 							<p>{{memory[0].description}}</p>

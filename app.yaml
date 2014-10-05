@@ -5,6 +5,10 @@ api_version: 1
 threadsafe: true
 
 handlers:
+- url: /favicon\.ico
+  mime_type: image/vnd.microsoft.icon
+  static_files: favicon.ico
+  upload: favicon.ico
 - url: /js
   static_dir: js
 - url: /css
@@ -13,6 +17,7 @@ handlers:
   static_dir: fonts
 - url: /.*
   script: pensieve.application
+
 
 libraries:
 - name: jinja2
