@@ -9,6 +9,9 @@ handlers:
   mime_type: image/vnd.microsoft.icon
   static_files: favicon.ico
   upload: favicon.ico
+- url: /bg.jpg
+  static_files: bg.jpg
+  upload: bg.jpg
 - url: /js
   static_dir: js
 - url: /css

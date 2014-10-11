@@ -22,11 +22,10 @@
 				</nav> 
 			</header>	
 			<div class="main">
-			{% if memories|length > 0 %}
+			{% if memory %}
 				<ul class="cbp_tmtimeline">
 
-				
-					{% for memory in memories %}	
+					
 					<li>
 					    
 						<time class="cbp_tmtime" datetime="2013-04-10 18:30"><span>{{memory.date}}</span></time>
@@ -46,7 +45,6 @@
 					
 					
 					</li>
-					{% endfor %}
 				</ul>
 
 					{% else %}
