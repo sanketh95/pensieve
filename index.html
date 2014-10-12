@@ -51,7 +51,7 @@
           <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
     </head>
-    <body class="skin-black">
+    <body class="skin-black fixed">
         <!-- header logo: style can be found in header.less -->
         <header class="header">
             <a href="/" class="logo">
@@ -59,7 +59,7 @@
                 Pensieve
             </a>
             <!-- Header Navbar: style can be found in header.less -->
-            <nav class="navbar navbar-static-top" role="navigation">
+            <nav class="navbar navbar-fixed-top" role="navigation">
                 <!-- Sidebar toggle button-->
                 <a href="#" class="navbar-btn sidebar-toggle" data-toggle="offcanvas" role="button">
                     <span class="sr-only">Toggle navigation</span>
@@ -73,7 +73,7 @@
                         
                         <!-- User Account: style can be found in dropdown.less -->
                         <li>
-                            <a href="/form">
+                            <a href="/addmemory">
                                 <i class="glyphicon glyphicon-plus"></i>
                                 <span>Add Memory</span>
                             </a>
@@ -144,7 +144,7 @@
                                 <!-- timeline time label -->
                                 
 
-                                {% for date in assortedmem %}
+                                {% for date in assortedmem|sort(reverse=True) %}
                                 <li class="time-label">
                                     <span class="bg-red">
                                         {{date.strftime('%d, %b %Y')}}
@@ -192,7 +192,7 @@
                                     <div class="no_mem">
                                         No Memories :(
                                         <span class="no_mem_exp">
-                                            <a href="/form">Add Memory ?</a>
+                                            <a href="/addmemory">Add Memory ?</a>
                                         </span>
                                     </div>  
 
@@ -218,6 +218,10 @@
         $('document').ready(init);
 
         function init() {
+
+
+            fix_sidebar();
+
             $('.edit').click(function() {
 
                 $('.timeline-body', $(this).parent().parent()).hide();
@@ -236,6 +240,7 @@
                 $('.deleteForm', $(this).parent().parent()).submit();
             });
         }
+
 
 
         </script>

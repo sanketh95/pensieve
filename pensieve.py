@@ -38,13 +38,13 @@ class User(webapp2_extras.appengine.auth.models.User):
 		return None, None
 
 class Memory(ndb.Model):
-	title = ndb.StringProperty()
-	date = ndb.DateProperty()
-	description = ndb.StringProperty(indexed=False)
-	location = ndb.StringProperty()
-	datetime = ndb.DateTimeProperty(auto_now_add=True)
-	user_id = ndb.IntegerProperty()
-
+	title = ndb.StringProperty(required=True)
+	date = ndb.DateProperty(required=True)
+	description = ndb.StringProperty(indexed=False, required=True)
+	location = ndb.StringProperty(required=True)
+	datetime = ndb.DateTimeProperty(auto_now_add=True, required=True)
+	user_id = ndb.IntegerProperty(required=True)
+	name = ndb.StringProperty(required=True)
 
 class Basehandler(webapp2.RequestHandler):
 	@webapp2.cached_property
@@ -106,7 +106,7 @@ class MainPage(Basehandler):
 	def get(self):
 		memory_query= Memory.query(
 			ancestor=pensieve_key()).order(-Memory.date)
-		memories = memory_query.fetch(10)
+		memories = memory_query.fetch()
 		assortedmem = {}
 		for memory in memories:
 			if assortedmem.has_key(memory.date):
@@ -235,7 +235,7 @@ config = {
 
 application = webapp2.WSGIApplication([
 	('/', MainPage),
-	('/form', Form ),
+	('/addmemory', Form),
 	('/add', AddtoPensieve),
 	('/remove', RemovefromPensieve),
 	('/memory', MemoryPermalink),

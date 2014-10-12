@@ -1,62 +1,241 @@
 <!DOCTYPE html>
-{% autoescape true %}
-<html lang="en" class="no-js">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
-		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-		<title>Pensieve</title>
-		<meta name="description" content="Save your memories" />
-		<meta name="author" content="sanketh" />
-		<link rel="shortcut icon" href="../favicon.ico">
-		<link rel="stylesheet" type="text/css" href="css/default.css" />
-		<link rel="stylesheet" type="text/css" href="css/component.css" />
-		<script src="js/modernizr.custom.js"></script>
-	</head>
-	<body>
-		<div class="container">
-			<header class="clearfix">
-				<h1>Pensieve</h1>
- 				<nav>
-					<a href="/" class="bp-icon bp-icon-prev" data-info="Pensieve"><span>Go Back</span></a>
-				</nav> 
-			</header>	
-			<div class="main">
-			{% if memory %}
-				<ul class="cbp_tmtimeline">
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Pensieve</title>
+        <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+        <!-- Ionicons -->
+        <link href="//code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css" rel="stylesheet" type="text/css" />
+        <!-- Theme style -->
+        <link href="css/AdminLTE.css" rel="stylesheet" type="text/css" />
+        <style type="text/css">
+            .no_mem {
+                height: 600px;
+                width: 100%;
+                position: relative;
+                text-align: center;
+                font-family: verdana;
+                font-size: 6em;
+                padding-top: 100px;
+            }
 
-					
-					<li>
-					    
-						<time class="cbp_tmtime" datetime="2013-04-10 18:30"><span>{{memory.date}}</span></time>
-					
-					
-						<div class="cbp_tmicon cbp_tmicon-earth"></div>
-						<div class="cbp_tmlabel">
+            .no_mem .no_mem_exp {
+                display: block;
+                text-align: center;
+                font-family: verdana;
+                font-size: 0.4em;
+            }
 
-						<form action="/remove" method="post" style="float:right">
-					    	<input value="{{memory.datetime}}" name="datetime" style="display:none">
-					    	<input type="submit" value="Delete">
-					    </form>
-					  
-							<h2>{{memory.title}}</h2>
-							<p>{{memory.description}}</p>
-						</div>
-					
-					
-					</li>
-				</ul>
+            .timeline-body {
+                white-space: pre-wrap;
+            }
 
-					{% else %}
-					<div class="no_mem">
-						Requested memory doesn't exist
-						<span class="no_mem_exp">
-							<a href="/">Go back</a>
-						</span>
-					</div>	
-					{% endif %}
-			</div>
-		</div>
-	</body>
+            .edit-area {
+                width: 100%;
+                max-width: 100%;
+                height :20em;
+                display: none;
+            }
+
+            .deleteForm {
+                display: none;
+            }
+        </style>
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+          <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body class="skin-black fixed">
+        <!-- header logo: style can be found in header.less -->
+        <header class="header">
+            <a href="/" class="logo">
+                <!-- Add the class icon to your logo image or logo icon to add the margining -->
+                Pensieve
+            </a>
+            <!-- Header Navbar: style can be found in header.less -->
+            <nav class="navbar navbar-fixed-top" role="navigation">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="navbar-btn sidebar-toggle" data-toggle="offcanvas" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <div class="navbar-right">
+                    <ul class="nav navbar-nav">
+                        <!-- Messages: style can be found in dropdown.less-->
+                        
+                        <!-- User Account: style can be found in dropdown.less -->
+                        <li>
+                            <a href="/addmemory">
+                                <i class="glyphicon glyphicon-plus"></i>
+                                <span>Add Memory</span>
+                            </a>
+                        </li>
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="glyphicon glyphicon-user"></i>
+                                <span>{{user['name']}} <i class="caret"></i></span>
+                            </a>
+                            <ul class="dropdown-menu">
+
+                                <li class="user-footer">
+                                <a href="/logout">Sign out</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <div class="wrapper row-offcanvas row-offcanvas-left">
+            <!-- Left side column. contains the logo and sidebar -->
+            <aside class="left-side sidebar-offcanvas">
+                <!-- sidebar: style can be found in sidebar.less -->
+                <section class="sidebar">
+                    <!-- Sidebar user panel -->
+                    <div class="user-panel">
+                        <div class="pull-left info">
+                            <p>Hello, {{user['name']}}</p>
+
+                        </div>
+                    </div>
+                    <!-- search form -->
+                    <form action="#" method="get" class="sidebar-form">
+                        <div class="input-group">
+                            <input type="text" name="q" class="form-control" placeholder="Search..."/>
+                            <span class="input-group-btn">
+                                <button type='submit' name='seach' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
+                            </span>
+                        </div>
+                    </form>
+                    
+                </section>
+                <!-- /.sidebar -->
+            </aside>
+
+            <!-- Right side column. Contains the navbar and content of the page -->
+            <aside class="right-side">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <h1>
+                        Pensieve
+                        <small>Because some memories never fade.</small>
+                    </h1>
+                </section>
+
+                <!-- Main content -->
+                <section class="content">
+                    <div class="pull-right">
+ 
+                    </div>
+                    <!-- row -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!-- The time line -->
+                            {% if memory %}
+                            <ul class="timeline">
+                                <!-- timeline time label -->
+                                
+                                <li class="time-label">
+                                    <span class="bg-red">
+                                        {{memory.date.strftime('%d, %b %Y')}}
+                                    </span>
+                                </li>
+                                <!-- /.timeline-label -->
+                                <!-- timeline item -->
+                                <li>
+                                    <i class="fa fa-envelope bg-blue"></i>
+                                    <div class="timeline-item">
+                                        <span class="time"><i class="fa fa-clock-o"></i> <a href="{{host_url}}/memory?id={{memory.key.id()}}">{{memory.datetime.strftime("%d, %b %Y")}}</a></span>
+                                        <h3 class="timeline-header"><a href="#">{{memory.title}}</a> <small>by {{memory.name}}</small></h3>
+                                        <div class="timeline-body">
+                                            {{memory.description}}
+                                        </div>
+                                        <form class="editForm" method="post" role="form" action="/update">
+                                            <input hidden type="text" name="id" value="{{memory.key.id()}}">
+                                            <textarea name="desc" class="edit-area">
+                                                {{memory.description}}
+                                            </textarea>
+                                        </form>
+
+                                        <form action="/remove" class="deleteForm" method="post">
+                                            <input hidden type="text" name="id" value="{{memory.key.id()}}">
+                                        </form>
+                                        <div class='timeline-footer'>
+                                            <button class="btn btn-primary btn-xs edit">Edit</button>
+                                            <button class="btn btn-primary btn-xs save" style="display:none">Save changes</button>
+                                            <button class="btn btn-danger btn-xs delete">Remove</button>
+                                        </div>
+                                    </div>
+                                </li>
+                                <!-- END timeline item -->
+                                <!-- timeline item -->
+                                <li>
+                                    <i class="fa fa-clock-o"></i>
+                                </li>
+                                
+                                <!-- END timeline item -->
+                            </ul>
+                            {% else %}
+                                    <div class="no_mem">
+                                        No Memories :(
+                                        <span class="no_mem_exp">
+                                            <a href="/addmemory">Add Memory ?</a>
+                                        </span>
+                                    </div>  
+
+                                {% endif %}
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+
+                  
+
+                </section><!-- /.content -->
+            </aside><!-- /.right-side -->
+        </div><!-- ./wrapper -->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js" type="text/javascript"></script>
+        <!-- AdminLTE App -->
+        <script src="js/app.js" type="text/javascript"></script>
+        <!-- AdminLTE for demo purposes -->
+       
+
+
+        <script type="text/javascript">
+        $('document').ready(init);
+
+        function init() {
+        	fix_sidebar();
+
+        	
+            $('.edit').click(function() {
+
+                $('.timeline-body', $(this).parent().parent()).hide();
+                $('.edit-area', $(this).parent().parent()).show();
+                
+                $(this).hide();
+                $('.save', $(this).parent()).show();
+            });
+
+            // Click the save changes button
+            $('.save').click(function(){
+                $('.editForm', $(this).parent().parent()).submit();
+            });
+
+            $('.delete').click(function(){
+                $('.deleteForm', $(this).parent().parent()).submit();
+            });
+        }
+
+
+        </script>
+    </body>
 </html>
-{% endautoescape %}
